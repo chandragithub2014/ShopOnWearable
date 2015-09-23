@@ -1,0 +1,15 @@
+<?xml version="1.0" encoding="utf-8"?>
+<resources>
+    <string-array name="catalog_array">
+        <item name="products">Products</item>
+        <item name="basket">Basket</item>
+        <item name="order">Orders</item>
+      </string-array>
+
+    <string-array name="catalog_image_array">
+        <item name="productimg">product_icon</item>
+        <item name="basketimg">basket_icon</item>
+        <item name="orderimg">order_icon</item>
+    </string-array>
+
+</resources>
