@@ -134,7 +134,7 @@ public class ListScreenFragment extends Fragment {
                 (WearableListView) view.findViewById(R.id.wearable_list);
         listView.setGreedyTouchMode(true);
         listView.setClickListener(mClickListener);
-        listView.smoothScrollToPosition(1);
+    //    listView.smoothScrollToPosition(1);
         Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
         toolBarTitle = (TextView)mToolBar.findViewById(R.id.title);
         checkOut = (TextView)mToolBar.findViewById(R.id.checkout);
@@ -181,9 +181,9 @@ public class ListScreenFragment extends Fragment {
             String productJSON = "";
             if (!TextUtils.isEmpty(WearableApplication.getInstance().getJson())) {
                 productJSON = WearableApplication.getInstance().getJson();
-            }else {
+            }/*else {
                 productJSON = WearJsonParser.getInstance().getJSON("listdata", context);
-            }
+            }*/
             if (!TextUtils.isEmpty(productJSON)) {
                 JSONObject json = WearJsonParser.getInstance().initializeJSON(productJSON, context);
                 if (json != null) {

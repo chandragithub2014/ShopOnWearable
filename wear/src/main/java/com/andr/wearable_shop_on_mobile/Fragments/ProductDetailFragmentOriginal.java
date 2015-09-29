@@ -13,7 +13,6 @@ import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.content.LocalBroadcastManager;
 import android.support.v7.widget.Toolbar;
-import android.text.TextUtils;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
@@ -41,15 +40,16 @@ import java.io.InputStream;
 import java.util.HashMap;
 import java.util.List;
 import java.util.concurrent.TimeUnit;
+
 /**
  * A simple {@link Fragment} subclass.
  * Activities that contain this fragment must implement the
- * {@link ProductDetailFragment.OnFragmentInteractionListener} interface
+ * {@link ProductDetailFragmentOriginal.OnFragmentInteractionListener} interface
  * to handle interaction events.
- * Use the {@link ProductDetailFragment#newInstance} factory method to
+ * Use the {@link ProductDetailFragmentOriginal#newInstance} factory method to
  * create an instance of this fragment.
  */
-public class ProductDetailFragment extends Fragment implements MessageApi.MessageListener,View.OnClickListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,DataApi.DataListener{
+public class ProductDetailFragmentOriginal extends Fragment implements MessageApi.MessageListener,View.OnClickListener,GoogleApiClient.ConnectionCallbacks, GoogleApiClient.OnConnectionFailedListener,DataApi.DataListener{
     // TODO: Rename parameter arguments, choose names that match
     // the fragment initialization parameters, e.g. ARG_ITEM_NUMBER
     private static final String ARG_PARAM1 = "name";
@@ -76,13 +76,8 @@ public class ProductDetailFragment extends Fragment implements MessageApi.Messag
      ImageView productImage;
 
     @Override
-    public void onDataChanged(DataEventBuffer dataEventBuffer) {
-        Log.d("TAG","onDataChanged()......");
-    }
-
-    @Override
     public void onClick(View v) {
-        /*if(v.getId()==R.id.prodImg){
+        if(v.getId()==R.id.prodImg){
             if (nodeId != null) {
                 new Thread(new Runnable() {
                     @Override
@@ -104,7 +99,7 @@ public class ProductDetailFragment extends Fragment implements MessageApi.Messag
                     }
                 }).start();
             }
-        }*/
+        }
     }
 
     /**
@@ -115,8 +110,8 @@ public class ProductDetailFragment extends Fragment implements MessageApi.Messag
      * @return A new instance of fragment ProductDetailFragment.
      */
     // TODO: Rename and change types and number of parameters
-    public static ProductDetailFragment newInstance(String param1) {
-        ProductDetailFragment fragment = new ProductDetailFragment();
+    public static ProductDetailFragmentOriginal newInstance(String param1) {
+        ProductDetailFragmentOriginal fragment = new ProductDetailFragmentOriginal();
         Bundle args = new Bundle();
         args.putString(ARG_PARAM1, param1);
     //    args.putString(ARG_PARAM2, param2);
@@ -124,7 +119,7 @@ public class ProductDetailFragment extends Fragment implements MessageApi.Messag
         return fragment;
     }
 
-    public ProductDetailFragment() {
+    public ProductDetailFragmentOriginal() {
         // Required empty public constructor
     }
 
@@ -146,15 +141,12 @@ public class ProductDetailFragment extends Fragment implements MessageApi.Messag
 
     private void initGoogleApiClient(){
         googleApiClient = getGoogleApiClient(getActivity());
-        googleApiClient.connect();
-     //   retrieveDeviceNode();
+        retrieveDeviceNode();
     }
 
     private GoogleApiClient getGoogleApiClient(Context context) {
         return new GoogleApiClient.Builder(context)
                 .addApi(Wearable.API)
-                .addConnectionCallbacks(this)
-                .addOnConnectionFailedListener(this)
                 .build();
     }
 
@@ -238,6 +230,11 @@ Log.d("Product DetailsFragment","OnResume()");
 
     }
 
+    @Override
+    public void onDataChanged(DataEventBuffer dataEventBuffer) {
+        Log.d("TAG","OnDataChanged()......");
+    }
+
     private void storeToBasket(){
         if (WearableApplication.getInstance().getBasketMap().get(productName) != null) {
             WearableApplication.getInstance().setListType("Basket");
@@ -309,31 +306,28 @@ Log.d("Product DetailsFragment","OnResume()");
 
     }
 
+/*    @Override
+    public void onDataChanged(DataEventBuffer dataEvents) {
 
+        Log.d("TAG","OnDataChanged Wear ProductDetailFragment");
+        for (DataEvent event : dataEvents) {
+            if (event.getType() == DataEvent.TYPE_CHANGED &&
+                    event.getDataItem().getUri().getPath().equals("/image")) {
+                DataMapItem dataMapItem = DataMapItem.fromDataItem(event.getDataItem());
+                Asset profileAsset = dataMapItem.getDataMap().getAsset("profileImage");
+
+                Bitmap bitmap = loadBitmapFromAsset(profileAsset);
+
+              setImage(bitmap);
+                // Do something with the bitmap
+            }
+        }
+    }*/
 
     @Override
     public void onConnected(Bundle bundle) {
         Log.d("ProductDetailFragment", "Connected to Google Api Service");
-        if(googleApiClient.isConnected() && !TextUtils.isEmpty(imageURL)) {
-            new Thread(new Runnable() {
-                @Override
-                public void run() {
-                    NodeApi.GetConnectedNodesResult nodes = Wearable.NodeApi.getConnectedNodes(googleApiClient).await();
-                    for(Node node : nodes.getNodes()) {
-                        MessageApi.SendMessageResult result = Wearable.MessageApi.sendMessage(googleApiClient, node.getId(), URL_PATH, imageURL.getBytes()).await();
-                        if(!result.getStatus().isSuccess()){
-                            Log.e("test", "error");
-                        } else {
-                            Log.i("test", "success!! sent to: " + node.getDisplayName());
-                        }
-                    }
-                    googleApiClient.disconnect();
-                }
-            }).start();
 
-        } else {
-            Log.e("test", "not connected");
-        }
   //  Wearable.DataApi.addListener(googleApiClient, this);
     }
 
