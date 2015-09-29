@@ -13,6 +13,7 @@ import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import com.andr.wearable_shop_on_mobile.Adapters.OrderAdapter;
 import com.andr.wearable_shop_on_mobile.Application.WearableApplication;
@@ -79,7 +80,7 @@ public class OrderListFragment extends Fragment {
         listView =
                 (WearableListView) view.findViewById(R.id.wearable_list);
         listView.setGreedyTouchMode(true);
-
+        listView.setClickListener(mClickListener);
         Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
         toolBarTitle = (TextView)mToolBar.findViewById(R.id.title);
         checkOut = (TextView)mToolBar.findViewById(R.id.checkout);
@@ -90,7 +91,7 @@ public class OrderListFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(mContainerId, new BasketTableFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(mContainerId, new CatalogListFragment()).addToBackStack(null).commit();
             }
         });
         populateOrderList(getActivity());
@@ -121,5 +122,44 @@ public class OrderListFragment extends Fragment {
         }
 
     }
+
+
+    // Handle our Wearable List's click events
+    private WearableListView.ClickListener mClickListener =
+            new WearableListView.ClickListener() {
+                @Override
+                public void onClick(WearableListView.ViewHolder viewHolder) {
+                 /*  Toast.makeText(getActivity(),
+                            String.format("You selected item #%s",
+                                    viewHolder.getLayoutPosition() + 1),
+                            Toast.LENGTH_SHORT).show();*/
+
+                    Toast.makeText(getActivity(),
+                            "Order Details",
+                            Toast.LENGTH_SHORT).show();
+
+
+                    FragmentManager fragmentManager = getFragmentManager();
+                    FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
+
+                    View v = viewHolder.itemView;
+                    TextView name = (TextView)v.findViewById(R.id.name);
+           //         TextView item2 = (TextView)v.findViewById(R.id.item3);
+
+                    String itemName = name.getText().toString();
+                   // String item3 =  item2.getText().toString();
+
+
+                    fragmentTransaction.replace(mContainerId, OrderDetailFragment.newInstance(itemName,"")).addToBackStack(null).commit();
+
+
+                }
+
+                @Override
+                public void onTopEmptyRegionClick() {
+                    Toast.makeText(getActivity(),
+                            "Top empty area tapped", Toast.LENGTH_SHORT).show();
+                }
+            };
 
 }

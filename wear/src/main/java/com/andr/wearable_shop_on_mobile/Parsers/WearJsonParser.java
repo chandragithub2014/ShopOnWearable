@@ -7,20 +7,22 @@
 	 */
 	package com.andr.wearable_shop_on_mobile.Parsers;
 
-	import android.content.Context;
-	import android.content.res.AssetManager;
-	import android.text.TextUtils;
+    import android.content.Context;
+    import android.content.res.AssetManager;
+    import android.text.TextUtils;
 
-	import com.andr.wearable_shop_on_mobile.DTO.ListData;
+    import com.andr.wearable_shop_on_mobile.Application.WearableApplication;
+    import com.andr.wearable_shop_on_mobile.DTO.ListData;
 
-	import org.json.JSONArray;
-	import org.json.JSONException;
-	import org.json.JSONObject;
+    import org.json.JSONArray;
+    import org.json.JSONException;
+    import org.json.JSONObject;
 
-	import java.io.IOException;
-	import java.io.InputStream;
-	import java.util.ArrayList;
-	import java.util.List;
+    import java.io.IOException;
+    import java.io.InputStream;
+    import java.util.ArrayList;
+    import java.util.HashMap;
+    import java.util.List;
 
 
 	public class WearJsonParser {
@@ -97,6 +99,7 @@
 		}
 
 	public List<ListData> getParsedListInfo(JSONArray selectedJSONCategoryArray){
+        HashMap<String,ListData>  productMultiValHash = new HashMap<String,ListData>();
 		List<ListData> parsedList = new ArrayList<ListData>();
 		try{
 	 if(selectedJSONCategoryArray!=null && selectedJSONCategoryArray.length()>0){
@@ -106,8 +109,10 @@
 			 tempList.setItem1(temp.getString("productimage"));
 			 tempList.setItem2(temp.getString("productname"));
 			 tempList.setItem3(temp.getString("productprice"));
-
-			 parsedList.add(i,tempList);
+             tempList.setImageurl(temp.getString("productimage"));
+			 tempList.setProductDescription(temp.getString("productdescription"));
+			 parsedList.add(i, tempList);
+             productMultiValHash.put(temp.getString("productname"),tempList);
 
 		 }
 	 }
@@ -118,6 +123,9 @@
 		catch (Exception e){
 			e.printStackTrace();
 		}
+        if(productMultiValHash!=null && productMultiValHash.size()>0){
+            WearableApplication.getInstance().setProductMultiValHash(productMultiValHash);
+        }
 		return parsedList;
 	}
 

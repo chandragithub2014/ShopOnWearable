@@ -32,4 +32,6 @@ public class MainActivity extends AppCompatActivity {
                 .replace(R.id.framelayout, new CatalogListFragment())
                 .commit();
     }
+
+
 }

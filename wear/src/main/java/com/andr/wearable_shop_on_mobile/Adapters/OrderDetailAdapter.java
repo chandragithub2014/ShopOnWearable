@@ -8,20 +8,24 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
-import com.andr.wearable_shop_on_mobile.DTO.ListData;
+import com.andr.wearable_shop_on_mobile.DTO.OrderDetailData;
 import com.andr.wearable_shop_on_mobile.R;
 
+import java.util.HashMap;
 import java.util.List;
 
+
 /**
- * Created by CHANDRASAIMOHAN on 9/18/2015.
+ * Created by 245742 on 9/2/2015.
  */
-public class Adapter extends WearableListView.Adapter {
+
+public class OrderDetailAdapter extends WearableListView.Adapter {
 
     private String[] mDataset;
-    private final Context mContext;// chandra
+    private final Context mContext;
     private final LayoutInflater mInflater;
-    private List<ListData> dataset;
+    private List<OrderDetailData> dataset;
+    private HashMap<String,String> orderHash;
 
 
 /*public Adapter(Context context, String[] dataset) {
@@ -30,39 +34,42 @@ public class Adapter extends WearableListView.Adapter {
     mDataset=dataset;
    }*/
 
-    public Adapter(Context context, List<ListData> dataset) {
+    public OrderDetailAdapter(Context context, List<OrderDetailData> dataset) {
         mContext=context;
         mInflater=LayoutInflater.from(context);
-        this.dataset =dataset;
+        this.dataset = dataset;
     }
     // Provide a reference to the type of views you're using
     public static class ItemViewHolder extends WearableListView.ViewHolder
-            implements WearableListView.OnCenterProximityListener
-    {
-        private TextView textView,item3;
-        //     private ImageView mCircle;
-        private ImageView mCircle;
+implements WearableListView.OnCenterProximityListener
+{
+        private TextView name,cost,qty;
+   //     private ImageView mCircle;
+        private ImageView  mCircle;
+
         public ItemViewHolder(View itemView) {
             super(itemView);
             // find the text view within the custom item's layout
-            textView = (TextView) itemView.findViewById(R.id.name);
-            item3  =  (TextView) itemView.findViewById(R.id.item3);
-      //      mCircle = (ImageView) itemView.findViewById(R.id.circle);
+            name = (TextView) itemView.findViewById(R.id.order_prodname);
+            cost  =  (TextView) itemView.findViewById(R.id.order_prodcost);
+            qty  =  (TextView) itemView.findViewById(R.id.order_prodQty);
         }
 
 
-        @Override
+   @Override
         public void onNonCenterPosition(boolean b) {
-            mCircle.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
-            textView.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
-            item3.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
+        //    mCircle.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
+       name.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
+       cost.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
+       qty.animate().scaleX(0.8f).scaleY(0.8f).alpha(0.6f);
         }
 
         @Override
         public void onCenterPosition(boolean b) {
-            mCircle.animate().scaleX(1f).scaleY(1f).alpha(1);
-            textView.animate().scaleX(1f).scaleY(1f).alpha(1);
-            item3.animate().scaleX(1f).scaleY(1f).alpha(1);
+         //   mCircle.animate().scaleX(1f).scaleY(1f).alpha(1);
+            name.animate().scaleX(1f).scaleY(1f).alpha(1);
+            cost.animate().scaleX(1f).scaleY(1f).alpha(1);
+            qty.animate().scaleX(1f).scaleY(1f).alpha(1);
         }
 
     }
@@ -71,18 +78,20 @@ public class Adapter extends WearableListView.Adapter {
     public void onBindViewHolder(WearableListView.ViewHolder holder, int position) {
         // retrieve the text view
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
-        TextView viewItem2 = itemHolder.textView;
-        viewItem2.setText(dataset.get(position).getItem2()
+        TextView name = itemHolder.name;
+        TextView cost = itemHolder.cost;
+        TextView qty = itemHolder.qty;
+
+        name.setText(dataset.get(position).getProductName()
 /*mDataset[position]*/
-        );
-        TextView viewItem3 = itemHolder.item3;
-        viewItem3.setText(dataset.get(position).getItem3()
-/*mDataset[position]*/
-        );
-   //     ImageView imageView = itemHolder.mCircle;
+);
+
+        cost.setText("Cost(in Rs.)"+"\t"+"\t"+dataset.get(position).getProductPrice());
+                qty.setText("Qty"+"\t"+"\t"+dataset.get(position).getProductQty());
+  /*    ImageView imageView = itemHolder.mCircle;
         // replace text contents
-     //   String imageURL = dataset.get(position).getItem1();
-     //   imageView.setImageResource(R.drawable.ic_launcher);
+         String imageURL = dataset.get(position).getItem1();
+        imageView.setImageResource(R.drawable.ic_launcher);*/
  /*       if(!TextUtils.isEmpty(imageURL)){
             if(imageURL.contains("http://")
                     || imageURL.contains("https://")) {
@@ -115,7 +124,7 @@ public class Adapter extends WearableListView.Adapter {
     @Override
     public WearableListView.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         // Inflate our custom layout for list items
-        return new ItemViewHolder(mInflater.inflate(R.layout.product_item, null));
+        return new ItemViewHolder(mInflater.inflate(R.layout.order_detail_row, null));
     }
 
 

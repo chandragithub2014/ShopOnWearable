@@ -28,11 +28,14 @@
             android:src="@drawable/back_icon"
             android:layout_alignParentStart="true" />
         <TextView
-            android:layout_width="wrap_content"
+            android:layout_width="100dp"
             android:layout_height="wrap_content"
             android:text="Products"
             android:id="@+id/title"
             android:layout_toRightOf="@id/back"
+            android:ellipsize="end"
+            android:scrollHorizontally="true"
+            android:singleLine="true"
           />
     <TextView
         android:id="@+id/checkout"

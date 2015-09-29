@@ -8,6 +8,7 @@ public class ListData {
     private String item2; //name
     private String item3; // cost
     private String imageurl; // url
+    private String productDescription;
     public String getItem1() {
         return item1;
     }
@@ -32,12 +33,20 @@ public class ListData {
         this.item3 = item3;
     }
 
-   /* public String getImageurl() {
+   public String getImageurl() {
         return imageurl;
     }
 
     public void setImageurl(String imageurl) {
         this.imageurl = imageurl;
-    }*/
+    }
+
+    public String getProductDescription() {
+        return productDescription;
+    }
+
+    public void setProductDescription(String productDescription) {
+        this.productDescription = productDescription;
+    }
 }
 

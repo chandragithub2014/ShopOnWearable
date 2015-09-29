@@ -77,7 +77,7 @@ implements WearableListView.OnCenterProximityListener
         // retrieve the text view
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
         TextView viewItem2 = itemHolder.textView;
-        viewItem2.setText("Order ID "+"\t"+"\t"+dataset.get(position).getOrderId()
+        viewItem2.setText(dataset.get(position).getOrderId()
 /*mDataset[position]*/
 );
         TextView viewItem3 = itemHolder.item3;

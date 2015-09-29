@@ -68,8 +68,12 @@ public class CatalogAdapter extends WearableListView.Adapter {
         ItemViewHolder itemHolder = (ItemViewHolder) holder;
         TextView name = itemHolder.textView;
         name.setText(dataset.get(position).getCatalogName());
+        String imageName = dataset.get(position).getCatalogImage();
         ImageView iamge = itemHolder.mCircle;
-        iamge.setImageResource(R.drawable.ic_launcher);
+   //     iamge.setImageResource(R.drawable.ic_launcher);
+
+        int drawableResourceId = mContext.getResources().getIdentifier(imageName, "drawable", mContext.getPackageName());
+        iamge.setImageResource(drawableResourceId);
 /*mDataset[position]*/
 
     }

@@ -18,10 +18,13 @@ import android.widget.TextView;
 import android.widget.Toast;
 
 import com.andr.wearable_shop_on_mobile.Application.WearableApplication;
+import com.andr.wearable_shop_on_mobile.DTO.OrderDetailData;
 import com.andr.wearable_shop_on_mobile.R;
 
+import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Iterator;
+import java.util.List;
 import java.util.Set;
 
 /**
@@ -88,7 +91,7 @@ public class BasketTableFragment extends Fragment {
         Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
         toolBarTitle = (TextView)mToolBar.findViewById(R.id.title);
          checkOut = (TextView)mToolBar.findViewById(R.id.checkout);
-
+        checkOut.setText("CheckOut");
         checkOut.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
@@ -102,7 +105,7 @@ public class BasketTableFragment extends Fragment {
             public void onClick(View v) {
                 FragmentManager fragmentManager = getFragmentManager();
                 FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-                fragmentTransaction.replace(mContainerId, new ListScreenFragment()).addToBackStack(null).commit();
+                fragmentTransaction.replace(mContainerId, new CatalogListFragment()).addToBackStack(null).commit();
             }
         });
       //  toolBarTitle.setText("Basket");
@@ -253,6 +256,7 @@ public class BasketTableFragment extends Fragment {
 
 
     public void calculateTotal(){
+        List<OrderDetailData> orderDetailList = new ArrayList<OrderDetailData>();
         HashMap<String,HashMap<String,Integer>> basketMap = WearableApplication.getInstance().getBasketMap();
         Set<String> keySet = basketMap.keySet();
         Iterator<String> keySetIterator = keySet.iterator();
@@ -272,26 +276,42 @@ public class BasketTableFragment extends Fragment {
             }
             System.out.println("key: " + key + " value: " + innerKey + " " + qty);
             totalCost+=(qty*(Integer.parseInt(innerKey)));
+
+            OrderDetailData temp = new OrderDetailData();
+            temp.setProductName(key);
+            temp.setProductPrice(innerKey);
+            temp.setProductQty("" + qty);
+            orderDetailList.add(temp);
+
+
         }
         if(totalCost>0){
                  Long time = System.currentTimeMillis();
             if(WearableApplication.getInstance().getOrderMap().size()>0) {
                 HashMap<String, String> orderHash = WearableApplication.getInstance().getOrderMap();// new HashMap<String, String>();
-                orderHash.put("" + time, "" + totalCost);
+                orderHash.put(""+time, ""+totalCost);
                 WearableApplication.getInstance().setOrderMap(orderHash);
             }else{
                 HashMap<String, String> orderHash = new HashMap<String, String>();
-                orderHash.put("" + time, "" + totalCost);
+                orderHash.put(""+time, ""+totalCost);
                 WearableApplication.getInstance().setOrderMap(orderHash);
             }
 
+            HashMap<String, List<OrderDetailData>> orderDetailHash = WearableApplication.getInstance().getOrderDetailHashh();
+            orderDetailHash.put(""+time,orderDetailList);
+            WearableApplication.getInstance().setOrderDetailHashh(orderDetailHash);
             Toast.makeText(getActivity(),"OrderPlaced::"+totalCost+"("+"Rs."+")",Toast.LENGTH_LONG).show();
+
+           /* HashMap<String, HashMap<String, HashMap<String, Integer>>>  orderDetailHash =  WearableApplication.getInstance().getOrderDetailHash();
+            orderDetailHash.put(""+time,basketMap);
+            WearableApplication.getInstance().setOrderDetailHash(orderDetailHash);*/
+
             basketMap.clear();
             WearableApplication.getInstance().setBasketMap(basketMap);
         }
-        FragmentManager fragmentManager = getFragmentManager();
+       /* FragmentManager fragmentManager = getFragmentManager();
         FragmentTransaction fragmentTransaction = fragmentManager.beginTransaction();
-        fragmentTransaction.replace(mContainerId, new OrderListFragment()).addToBackStack(null).commit();
+        fragmentTransaction.replace(mContainerId, new OrderListFragment()).addToBackStack(null).commit();*/
     }
 
    /* // TODO: Rename method, update argument and hook method into UI event

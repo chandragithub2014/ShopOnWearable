@@ -134,7 +134,7 @@ public class ListScreenFragment extends Fragment {
                 (WearableListView) view.findViewById(R.id.wearable_list);
         listView.setGreedyTouchMode(true);
         listView.setClickListener(mClickListener);
-
+        listView.smoothScrollToPosition(1);
         Toolbar mToolBar = (Toolbar)getActivity().findViewById(R.id.toolbar);
         toolBarTitle = (TextView)mToolBar.findViewById(R.id.title);
         checkOut = (TextView)mToolBar.findViewById(R.id.checkout);
@@ -219,7 +219,7 @@ public class ListScreenFragment extends Fragment {
                             Toast.LENGTH_SHORT).show();*/
 
                     Toast.makeText(getActivity(),
-                           "Added to BASKET",
+                           "Product Details",
                             Toast.LENGTH_SHORT).show();
 
 
@@ -233,36 +233,9 @@ public class ListScreenFragment extends Fragment {
                     String itemName = name.getText().toString();
                     String item3 =  item2.getText().toString();
 
-                   /* CardFragment cardFragment = CardFragment.create(itemName,
-                            "Cost" + item3*//*+(viewHolder.getLayoutPosition() + 1)*//*,
-                            R.drawable.basket);
 
-                    fragmentTransaction.add(R.id.frame_layout, cardFragment);
-                    fragmentTransaction.commit();*/
-//if(!WearableApplication.getInstance().getListType().equalsIgnoreCase("Basket")) {
-    if (WearableApplication.getInstance().getBasketMap().get(itemName) != null) {
-        WearableApplication.getInstance().setListType("Basket");
-        HashMap<String, Integer> innerHashMap = WearableApplication.getInstance().getBasketMap().get(itemName);
-        int qty = innerHashMap.get(item3);
-        qty = qty + 1;
-        innerHashMap.put(item3, qty);
-        HashMap<String, HashMap<String, Integer>> basket = WearableApplication.getInstance().getBasketMap();
-        basket.remove(itemName);
-        basket.put(itemName, innerHashMap);
-        WearableApplication.getInstance().setBasketMap(basket);
-    } else {
-        WearableApplication.getInstance().setListType("Basket");
-        HashMap<String, HashMap<String, Integer>> basketMap = WearableApplication.getInstance().getBasketMap();//new HashMap<String, HashMap<String, Integer>>();
-        HashMap<String, Integer> innerHashMap = new HashMap<String, Integer>();
-        innerHashMap.put(item3, 1);
-        basketMap.put(itemName, innerHashMap);
-        WearableApplication.getInstance().setBasketMap(basketMap);
-    }
-   fragmentTransaction.replace(mContainerId, new BasketTableFragment()).addToBackStack(null).commit();
- //   fragmentTransaction.replace(mContainerId, new CardFrameFragment()).addToBackStack(null).commit();
- //   fragmentTransaction.add(mContainerId,new ListScreenFragment()).addToBackStack(null).commit();
-   // fragmentTransaction.commit();
-//}
+                    fragmentTransaction.replace(mContainerId, ProductDetailFragment.newInstance(itemName)).addToBackStack(null).commit();
+
 
                 }
 
